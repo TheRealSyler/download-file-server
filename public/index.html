@@ -18,10 +18,17 @@
     --CARDS--
   </div>
   <div class="header" style="text-align: center">Upload</div>
+  <div style="display: flex; justify-content: center;">
 
+  </div>
   <form ref='uploadForm' id='uploadForm' action='upload' method='post' encType="multipart/form-data">
-    <input class="file-upload" type="file" name="file" />
-    <input type='submit' value='Upload' class="button" />
+    <input id="uploadInput" onchange="changeUploadInput()" style="height: 0; width: 0; overflow: hidden;" type="file"
+      name="file" />
+    <button id="uploadButton" onclick="selectFile()" type="button" class="button">Select File</button>
+    <span id="uploadFileName" style="margin-right: 40px; margin-left: 20px; align-self: center;"></span>
+    <div id="uploadLoader" style="display: none; align-self: center;" class="loader"></div>
+
+    <input id="uploadSubmit" type='submit' value='Upload' class="button primary" onclick="onUpload()" disabled="true" />
 
   </form>
 
@@ -29,6 +36,37 @@
     function Download(path) {
       window.open(`/download/${path}`)
       console.log('DOWNLOAD', path)
+    }
+
+    function changeUploadInput() {
+      const fileInput = document.getElementById("uploadInput")
+      const uploadFileName = document.getElementById("uploadFileName")
+      const uploadSubmit = document.getElementById("uploadSubmit")
+      const file = fileInput.files[0]
+      const fileName = file ? file.name : fileInput.value
+
+
+      uploadFileName.innerText = fileName
+
+
+      if (fileName) {
+        uploadSubmit.disabled = false
+      } else {
+        uploadSubmit.disabled = true
+      }
+    }
+
+    function onUpload() {
+      document.getElementById('uploadLoader').style.display = 'block'
+      document.getElementById("uploadSubmit").style.display = 'none'
+      document.getElementById("uploadButton").style.display = 'none'
+
+      const fileName = document.getElementById("uploadFileName").innerText
+      document.getElementById("uploadFileName").innerHTML = `<span style="color: #777">Uploading: </span>${fileName}`
+    }
+
+    function selectFile() {
+      document.getElementById("uploadInput").click();
     }
   </script>
 </body>

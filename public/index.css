@@ -29,11 +29,6 @@ form{
   border-bottom: solid 1px #222;
 }
 
-.file-upload {
-  font-size: 1.2rem;
-  align-self: center;
-}
-
 .button {
   padding: 0.8rem 2rem;
   font-size: 1.2rem;
@@ -45,7 +40,41 @@ form{
   transition: background-color 200ms;
 }
 
+.button.primary {
+  background: #e26;
+}
+
+.button.primary:hover {
+  background: #f26;
+}
+
 .button:hover {
   background: #333335;
 }
 
+.button:hover:disabled,
+.button:disabled {
+  color: #777;
+  background: transparent;
+}
+
+
+.loader {
+  border: 5px solid #333335;
+  border-top: 5px solid #f26;
+  border-radius: 50%;
+  background: #0000;
+  width: 20px;
+  height: 20px;
+  z-index: 100;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}

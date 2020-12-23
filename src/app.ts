@@ -22,8 +22,8 @@ app.use(busboy({
 
 app.get('/', async (req, res) => {
   console.log('get: /', req.ip)
-  const css = (await promises.readFile('./public/index.css')).toString()
-  const html = (await promises.readFile('./public/index.html')).toString()
+  const css = await LoadFile('./public/index.css')
+  const html = await LoadFile('./public/index.html')
 
   res.send(html.replace('--CARDS--', await genCards()).replace('--STYLE--', `<style>${css}</style>`))
 });
@@ -33,22 +33,27 @@ app.get('/download/:name', (req, res) => {
 });
 
 
+
 app.post("/upload", (req, res) => {
 
   req.pipe(req.busboy);
 
   req.busboy.on('file', (fieldName, file, filename) => {
-    console.log(`Upload of '${filename}' started`);
+    if (filename) {
 
+      console.log(`Upload of '${filename}' started`);
 
-    const fsStream = createWriteStream(join(uploadPath, filename));
-    file.pipe(fsStream);
+      const fsStream = createWriteStream(join(uploadPath, filename));
+      file.pipe(fsStream);
 
-
-    fsStream.on('close', () => {
-      console.log(`Upload of '${filename}' finished`);
-      res.redirect('back');
-    });
+      fsStream.on('close', () => {
+        console.log(`Upload of '${filename}' finished`);
+        res.redirect('back');
+      });
+    } else {
+      console.log('upload filename empty')
+      res.redirect('back')
+    }
   });
 
 });
@@ -85,4 +90,8 @@ function ensureDir(dir: string) {
   if (!exits) {
     mkdirSync(dir)
   }
+}
+
+async function LoadFile(path: string) {
+  return (await promises.readFile(path)).toString()
 }
