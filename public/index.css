@@ -54,6 +54,7 @@ form{
 
 .button:hover:disabled,
 .button:disabled {
+  cursor: default;
   color: #777;
   background: transparent;
 }
