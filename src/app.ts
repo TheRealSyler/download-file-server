@@ -75,13 +75,13 @@ server.listen(PORT, IP as any, () => {
 });
 
 function Download(ip: string, res: Response, file: string) {
-  console.log('Download:', file, `(${ip})`, new Date().toLocaleTimeString());
+  console.log('Started downloading:', file, `(${ip})`, new Date().toLocaleTimeString());
   // ONLY FILES WORK, FOLDERS DO NOT GET DOWNLOADED
   const files = createReadStream(resolve(process.cwd(), 'assets', file));
   res.writeHead(200, { 'Content-disposition': `attachment; filename=${file}` }); //here you can specify file name
   const a = files.pipe(res)
   a.addListener('close', () => {
-    console.log('Downloaded:', file, `(${ip})`, new Date().toLocaleTimeString());
+    console.log('Finished downloading:', file, `(${ip})`, new Date().toLocaleTimeString());
   })
 }
 
