@@ -1,15 +1,14 @@
 import express = require('express');
+import busboy from 'connect-busboy';
+import { config } from 'dotenv';
 import { Response } from 'express';
+import { createReadStream, createWriteStream, existsSync, mkdirSync, promises } from 'fs';
 import { Server } from 'http';
 import { join, resolve } from 'path';
-import { createReadStream, createWriteStream, promises, existsSync, mkdirSync } from 'fs';
-import busboy from 'connect-busboy';
-import { config } from 'dotenv'
 
 config()
 
-const PORT = process.env.PORT || 5000;
-const IP = process.env.IP || '192.168.7.131'
+const PORT = process.env.PORT;
 const uploadPath = resolve(process.cwd(), 'assets')
 ensureDir(uploadPath);
 
@@ -70,8 +69,8 @@ async function genCards() {
   return out
 }
 
-server.listen(PORT, IP as any, () => {
-  console.log('Listening... ', `http://${IP}:${PORT}`);
+server.listen(PORT, () => {
+  console.log('Listening... ', `PORT`);
 });
 
 function Download(ip: string, res: Response, file: string) {
